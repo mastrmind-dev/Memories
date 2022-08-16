@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useStyles from "./styles.js";
 import { TextField, Button, Typography, Paper } from "@material-ui/core";
 import FileBase from "react-file-base64";
-import { useDispatch } from "react-redux";
-import { createPost,updatePost } from "../../action/PostsAction";
+import { useDispatch, useSelector } from "react-redux";
+import { createPost, updatePost } from "../../action/PostsAction";
 
 const Form = ({ currentId, setCurrentId }) => {
+  const posts = useSelector((state) => {
+    return state.posts;
+  });
   const classes = useStyles();
   const [postData, setPostData] = useState({
     creator: "",
@@ -16,17 +19,45 @@ const Form = ({ currentId, setCurrentId }) => {
   });
   const dispatch = useDispatch();
 
+  const initialState = {
+    creator: "",
+    title: "",
+    message: "",
+    tags: "",
+    selectedFile: "",
+  };
+
+  useEffect(() => {
+    if (currentId) {
+      getPostDataForUpdate();
+    } else {
+      console.log("current");
+      setPostData(initialState);
+    }
+  }, [currentId]);
+
+  const getPostDataForUpdate = () => {
+    posts.forEach((post) => {
+      if (post._id == currentId) {
+        setPostData(post);
+      }
+    });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    setPostData(initialState)
     if (!currentId) {
       dispatch(createPost(postData));
     } else {
       dispatch(updatePost(currentId, postData));
-      setCurrentId(null)
+      setCurrentId(null);
     }
   };
   const clear = () => {
-    console.log("cancel");
+    console.log("hi");
+    setCurrentId(null);
+    setPostData(initialState);
   };
   return (
     <Paper className={classes.paper}>
@@ -41,7 +72,7 @@ const Form = ({ currentId, setCurrentId }) => {
           variant="h6"
           style={{ backgroundColor: "#FFAA00", padding: 10, borderRadius: 5 }}
         >
-          Creating a memory
+          {currentId ? "Updating a memory" : "Creating a memory"}
         </Typography>
         <TextField
           name="creator"
