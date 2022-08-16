@@ -1,0 +1,34 @@
+"use strict";
+
+const PostMessage = require("../models/postMessage");
+
+//this is how you export multiple functions in node.js, using them as object key valu pairs
+module.exports = {
+  getPosts: async (req, res) => {
+    try {
+      const postMessages = await PostMessage.find();
+      res.status(200).json(postMessages);
+    } catch (error) {
+      console.log(error.message);
+      res.status(404).json({ message: error.message });
+    }
+  },
+
+  createPost: async (req, res) => {
+    const { title, message, selectedFile, creator, tags } = req.body;
+    // console.log(post)
+    // const selectedFile = JSON.stringify(selectedFile)
+    // console.log(typeof(sf))
+    const newPost = new PostMessage({ title, message, selectedFile, creator, tags });
+    try {
+      await newPost.save();
+      res.status(201).json(newPost);
+    } catch (error) {
+      res.status(409).json({ message: error.message });
+    }
+  },
+
+  updatePost:async(req, res)=>{
+    
+  }
+};
