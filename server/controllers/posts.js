@@ -19,7 +19,13 @@ module.exports = {
     // console.log(post)
     // const selectedFile = JSON.stringify(selectedFile)
     // console.log(typeof(sf))
-    const newPost = new PostMessage({ title, message, selectedFile, creator, tags });
+    const newPost = new PostMessage({
+      title,
+      message,
+      selectedFile,
+      creator,
+      tags,
+    });
     try {
       await newPost.save();
       res.status(201).json(newPost);
@@ -28,7 +34,17 @@ module.exports = {
     }
   },
 
-  updatePost:async(req, res)=>{
-    
-  }
+  updatePost: async (req, res) => {
+    const { id: _id } = req.params;
+
+    const post = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(_id))
+      return res.statu(404).send("No post with that id");
+
+    const updatedPost = await postMessage.findByIdAndUpdate(_id, post, {
+      new: true, //this is a compulsory thing if we want to get updated document as a return. otherwise mongodb returns the document before updating.
+    });
+    res.json(updatedPost)
+  },
 };
