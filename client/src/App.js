@@ -1,20 +1,21 @@
-import React, {useEffect} from "react";
+import React, { useEffect, useState } from "react";
 import { Container, AppBar, Typography, Grid, Grow } from "@material-ui/core";
 import memories from "./images/memories.png";
 import Form from "./components/Form/Form";
 import Posts from "./components/Posts/Posts";
 import useStyles from "./styles.js";
-import {useDispatch} from 'react-redux'
-import {getPosts} from './action/PostsAction'
+import { useDispatch } from "react-redux";
+import { getPosts } from "./action/PostsAction";
 // import "./App.cs"
 
 const App = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const [currentId, setCurrentId] = useState(null);
   const classes = useStyles();
-  useEffect(()=>{
-    console.log('exe')
-    dispatch(getPosts())
-  }, [dispatch])
+  useEffect(() => {
+    dispatch(getPosts());
+  }, [dispatch, currentId]);
+  
   return (
     <Container maxwidth="lg">
       <AppBar position="static" color="inherit" className={classes.appBar}>
@@ -32,10 +33,10 @@ const App = () => {
         <Container>
           <Grid container justify="space-between" alignitems="stretch">
             <Grid item xs={12} sm={7}>
-              <Posts />
+              <Posts setCurrentId={setCurrentId} />
             </Grid>
             <Grid item xs={12} sm={4}>
-              <Form />
+              <Form currentId={currentId} setCurrentId={setCurrentId} />
             </Grid>
           </Grid>
         </Container>

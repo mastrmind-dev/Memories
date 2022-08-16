@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import useStyles from "./styles.js";
 import { TextField, Button, Typography, Paper } from "@material-ui/core";
 import FileBase from "react-file-base64";
-import {useDispatch} from "react-redux"
-import {createPost} from "../../action/PostsAction"
+import { useDispatch } from "react-redux";
+import { createPost,updatePost } from "../../action/PostsAction";
 
-const Form = () => {
+const Form = ({ currentId, setCurrentId }) => {
   const classes = useStyles();
   const [postData, setPostData] = useState({
     creator: "",
@@ -14,15 +14,20 @@ const Form = () => {
     tags: "",
     selectedFile: "",
   });
-const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(createPost(postData))
+    if (!currentId) {
+      dispatch(createPost(postData));
+    } else {
+      dispatch(updatePost(currentId, postData));
+      setCurrentId(null)
+    }
   };
-  const clear=()=>{
-      console.log('cancel')
-  }
+  const clear = () => {
+    console.log("cancel");
+  };
   return (
     <Paper className={classes.paper}>
       <form
@@ -32,7 +37,12 @@ const dispatch = useDispatch();
         onSubmit={handleSubmit}
       >
         {/*if we need to pass some arguments to handleSubmit function, we should wrap the handliSubmit function inside of an arrow function.*/}
-        <Typography variant="h6" style={{backgroundColor:"#FFAA00", padding:10, borderRadius:5,}}>Creating a memory</Typography>
+        <Typography
+          variant="h6"
+          style={{ backgroundColor: "#FFAA00", padding: 10, borderRadius: 5 }}
+        >
+          Creating a memory
+        </Typography>
         <TextField
           name="creator"
           label="Creator"
@@ -77,13 +87,30 @@ const dispatch = useDispatch();
           <FileBase
             type="file"
             multiple={false}
-            onDone={({base64}) => {
-              setPostData({ ...postData, selectedFile:base64 });
+            onDone={({ base64 }) => {
+              setPostData({ ...postData, selectedFile: base64 });
             }}
           />
         </div>
-        <Button className={classes.buttonSubmit} variant="contained" color="primary" size="large" type='submit' fullWidth>Submit</Button>
-        <Button variant="contained" color="secondary" size="small" onClick={clear} fullWidth>Clear</Button>
+        <Button
+          className={classes.buttonSubmit}
+          variant="contained"
+          color="primary"
+          size="large"
+          type="submit"
+          fullWidth
+        >
+          Submit
+        </Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          size="small"
+          onClick={clear}
+          fullWidth
+        >
+          Clear
+        </Button>
       </form>
     </Paper>
   );
