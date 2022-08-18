@@ -1,7 +1,7 @@
 "use strict";
 
 const PostMessage = require("../models/postMessage");
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 
 //this is how you export multiple functions in node.js, using them as object key valu pairs
 module.exports = {
@@ -41,11 +41,26 @@ module.exports = {
     const post = req.body;
 
     if (!mongoose.Types.ObjectId.isValid(_id))
-      return res.statu(404).send("No post with that id");
+      return res.status(404).send("No post with that id");
 
     const updatedPost = await PostMessage.findByIdAndUpdate(_id, post, {
       new: true, //this is a compulsory thing if we want to get updated document as a return. otherwise mongodb returns the document before updating.
     });
-    res.json(updatedPost)
+    res.json(updatedPost);
+  },
+
+  deletePost: async (req, res) => {
+    try {
+      const { id: _id } = req.params;
+
+      if (!mongoose.Types.ObjectId.isValid(_id))
+        return res.status(404).send("No post with that id");
+
+      const deletePost = await PostMessage.deleteOne({ _id });
+
+      res.json(deletePost);
+    } catch (error) {
+      console.log(error.message);
+    }
   },
 };

@@ -9,7 +9,7 @@ const env = require("dotenv")
 env.config()
 const app = express();
 
-app.use(cors({ origin: "http://localhost:3000" }));
+app.use(cors());
 
 app.use(bodyParser.json({limit:'30mb'}));
 app.use(bodyParser.urlencoded({ extended: true }));
