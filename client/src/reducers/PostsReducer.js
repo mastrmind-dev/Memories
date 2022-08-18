@@ -5,7 +5,9 @@ export default (posts = [], action) => {
     case "CREATE":
       return [...posts, action.payload];
     case "UPDATE":
-      return []
+      return [];
+    case "DELETE":
+      return posts.filter((post) => post._id != action.payload);
     default:
       return posts;
   }
