@@ -16,27 +16,31 @@ import moment from "moment";
 import { deletePost, updatePost } from "../../../actions/PostsAction";
 
 const Post = ({ post, setCurrentId }) => {
+  const user = "gethara";
   const dispatch = useDispatch();
   const classes = useStyles();
   const [liked, setLiked] = useState(false);
   const [postId, setPostId] = useState(null);
-  const initialRender = useRef(true);
+  const initialRender = useRef(true); //this is used to prevent useEffect, executing the code block at the first render.
 
   useEffect(() => {
     if (initialRender.current) {
       console.log("intialRender");
       initialRender.current = false;
     } else {
-      console.log("not initialrender");
       putALike(postId);
     }
   }, [liked]);
 
   async function putALike(postId) {
-    console.log("liked");
-    console.log(liked);
-    if (liked) {
-      console.log("liked executed");
+    if (
+      liked &&
+      !post.likedUsers.find((likedUser) => {
+        return likedUser == user;
+      })
+    ) {
+      post.likedUsers.push(user);
+      console.log(post.likedUsers);
       dispatch(updatePost(postId, { likeCount: ++post.likeCount }));
       setPostId(null);
     } else {
