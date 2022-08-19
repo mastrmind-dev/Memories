@@ -20,12 +20,16 @@ export const createPost = (postData) => async (dispatch) => {
 };
 
 export const updatePost = (currentId, postData) => async (dispatch) => {
-  try {
-    const { data } = await api.updatePost(currentId, postData);
-    console.log("updated post", data);
-  } catch (error) {
-    console.log(error.message);
-  }
+  return new Promise(async (res, rej)=>{
+    try {
+      const { data } = await api.updatePost(currentId, postData);
+      console.log("updated post", data);
+      res(data)
+    } catch (error) {
+      console.log(error.message);
+      rej(error.message)
+    }
+  })
 };
 
 export const deletePost = (postId) => async (dispatch) => {

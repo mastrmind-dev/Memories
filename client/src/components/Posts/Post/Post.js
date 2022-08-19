@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import useStyles from "./styles.js";
-import {useDispatch} from "react-redux"
+import { useDispatch } from "react-redux";
 import {
   Card,
   CardActions,
@@ -13,11 +13,40 @@ import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
 import DeleteIcon from "@material-ui/icons/Delete";
 import moment from "moment";
-import {deletePost} from "../../../actions/PostsAction"
+import { deletePost, updatePost } from "../../../actions/PostsAction";
 
 const Post = ({ post, setCurrentId }) => {
-const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const classes = useStyles();
+  const [liked, setLiked] = useState(false);
+  const [postId, setPostId] = useState(null);
+  const initialRender = useRef(true);
+
+  useEffect(() => {
+    if (initialRender.current) {
+      console.log("intialRender");
+      initialRender.current = false;
+    } else {
+      console.log("not initialrender");
+      putALike(postId);
+    }
+  }, [liked]);
+
+  async function putALike(postId) {
+    console.log("liked");
+    console.log(liked);
+    if (liked) {
+      console.log("liked executed");
+      dispatch(updatePost(postId, { likeCount: ++post.likeCount }));
+      setPostId(null);
+    } else {
+      if (!(post.likeCount === 0)) {
+        dispatch(updatePost(postId, { likeCount: --post.likeCount }));
+        setPostId(null);
+      }
+    }
+  }
+
   return (
     <Card className={classes.card}>
       <CardMedia
@@ -32,7 +61,13 @@ const dispatch = useDispatch()
         </Typography>
       </div>
       <div className={classes.overlay2}>
-        <Button style={{ color: "white" }} size="small" onClick={() => {setCurrentId(post._id)}}>
+        <Button
+          style={{ color: "white" }}
+          size="small"
+          onClick={() => {
+            setCurrentId(post._id);
+          }}
+        >
           <MoreHorizIcon fontSize="default" />
         </Button>
       </div>
@@ -49,12 +84,25 @@ const dispatch = useDispatch()
         </Typography>
       </CardContent>
       <CardActions className={classes.cardActions}>
-        <Button size="small" color="primary" onClick={() => {}}>
+        <Button
+          size="small"
+          color="primary"
+          onClick={() => {
+            setPostId(post._id);
+            setLiked(!liked);
+          }}
+        >
           <ThumbUpAltIcon size="default" />
           Like
           {post.likeCount}
         </Button>
-        <Button size="small" color="primary" onClick={() => {dispatch(deletePost(post._id))}}>
+        <Button
+          size="small"
+          color="primary"
+          onClick={() => {
+            dispatch(deletePost(post._id));
+          }}
+        >
           <DeleteIcon size="default" />
           Delete
         </Button>
