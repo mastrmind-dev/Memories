@@ -6,7 +6,7 @@ import Posts from "./components/Posts/Posts";
 import useStyles from "./styles.js";
 import { useDispatch } from "react-redux";
 import { getPosts } from "./actions/PostsAction";
-// import "./App.cs"
+// import "./App.css"
 
 const App = () => {
   const dispatch = useDispatch();

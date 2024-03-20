@@ -1,4 +1,4 @@
-export default (posts = [], action) => {
+export const postReducer = (posts = [], action) => {
   switch (action.type) {
     case "FETCH_ALL":
       return action.payload;
@@ -7,7 +7,7 @@ export default (posts = [], action) => {
     case "UPDATE":
       return [];
     case "DELETE":
-      return posts.filter((post) => post._id != action.payload);
+      return posts.filter((post) => post._id !== action.payload.postId);
     default:
       return posts;
   }

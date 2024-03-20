@@ -17,9 +17,6 @@ module.exports = {
 
   createPost: async (req, res) => {
     const { title, message, selectedFile, creator, tags } = req.body;
-    // console.log(post)
-    // const selectedFile = JSON.stringify(selectedFile)
-    // console.log(typeof(sf))
     const newPost = new PostMessage({
       title,
       message,

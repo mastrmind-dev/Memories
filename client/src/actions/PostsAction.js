@@ -23,7 +23,6 @@ export const updatePost = (currentId, postData) => async (dispatch) => {
   return new Promise(async (res, rej)=>{
     try {
       const { data } = await api.updatePost(currentId, postData);
-      console.log("updated post", data);
       res(data)
     } catch (error) {
       console.log(error.message);
@@ -35,7 +34,7 @@ export const updatePost = (currentId, postData) => async (dispatch) => {
 export const deletePost = (postId) => async (dispatch) => {
   try {
     const { data } = await api.deletePost(postId);
-    dispatch({type:"DELETE", payload: postId })
+    dispatch({type:"DELETE", payload: {postId} })
   } catch (error) {
     console.log(error.message);
   }

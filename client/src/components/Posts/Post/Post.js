@@ -25,7 +25,6 @@ const Post = ({ post, setCurrentId }) => {
 
   useEffect(() => {
     if (initialRender.current) {
-      console.log("intialRender");
       initialRender.current = false;
     } else {
       putALike(postId);
@@ -40,7 +39,6 @@ const Post = ({ post, setCurrentId }) => {
       })
     ) {
       post.likedUsers.push(user);
-      console.log(post.likedUsers);
       dispatch(updatePost(postId, { likeCount: ++post.likeCount }));
       setPostId(null);
     } else {
