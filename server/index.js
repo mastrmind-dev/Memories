@@ -14,7 +14,7 @@ app.use(cors());
 app.use(bodyParser.json({ limit: "30mb" }));
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const postRouter = require("./routes/posts");
+const postRouter = require("./routes/postsRouter");
 
 app.use("/posts", postRouter);
 

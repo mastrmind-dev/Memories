@@ -17,3 +17,7 @@ export const updatePost = async (id, updateData) => {
 export const deletePost = async (postId) => {
   return await axios.delete(`${url}/${postId}`);
 };
+
+export const likePost = async (postId) => {
+  return await axios.patch(`${url}/${postId}/likePost`);
+}

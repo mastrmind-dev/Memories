@@ -14,12 +14,13 @@ import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
 import DeleteIcon from "@material-ui/icons/Delete";
 import moment from "moment";
 import { deletePost, updatePost } from "../../../actions/PostsAction";
+import { ArrowDropDown } from "@material-ui/icons";
 
 const Post = ({ post, setCurrentId }) => {
   const user = "gethara";
   const dispatch = useDispatch();
   const classes = useStyles();
-  const [liked, setLiked] = useState(false);
+  const [liked, setLiked] = useState(post.likeCount > 0 ? true : false);
   const [postId, setPostId] = useState(null);
   const initialRender = useRef(true); //this is used to prevent useEffect, executing the code block at the first render.
 
@@ -32,12 +33,7 @@ const Post = ({ post, setCurrentId }) => {
   }, [liked]);
 
   async function putALike(postId) {
-    if (
-      liked &&
-      !post.likedUsers.find((likedUser) => {
-        return likedUser == user;
-      })
-    ) {
+    if (liked && !post.likedUsers.includes(user)) {
       post.likedUsers.push(user);
       dispatch(updatePost(postId, { likeCount: ++post.likeCount }));
       setPostId(null);
@@ -64,13 +60,16 @@ const Post = ({ post, setCurrentId }) => {
       </div>
       <div className={classes.overlay2}>
         <Button
-          style={{ color: "white" }}
+          style={{ fontWeight: 600 }}
           size="small"
           onClick={() => {
             setCurrentId(post._id);
           }}
+          color="primary"
+          variant="outlined"
         >
-          <MoreHorizIcon fontSize="default" />
+          {/* <MoreHorizIcon fontSize="medium"></MoreHorizIcon> */}
+          Update
         </Button>
       </div>
       <div className={classes.details}>
@@ -82,25 +81,29 @@ const Post = ({ post, setCurrentId }) => {
       </div>
       <CardContent>
         <Typography className={classes.title} variant="h5" gutterBottom>
+          {post.title}
+        </Typography>
+        <Typography className={classes.message} variant="h5" gutterBottom>
           {post.message}
         </Typography>
       </CardContent>
       <CardActions className={classes.cardActions}>
         <Button
           size="small"
-          color="primary"
           onClick={() => {
             setPostId(post._id);
             setLiked(!liked);
           }}
+          className={classes.likeButton}
+          variant="contained"
         >
           <ThumbUpAltIcon size="default" />
-          Like
+          LIKE
           {post.likeCount}
         </Button>
         <Button
           size="small"
-          color="primary"
+          color="secondary"
           onClick={() => {
             dispatch(deletePost(post._id));
           }}

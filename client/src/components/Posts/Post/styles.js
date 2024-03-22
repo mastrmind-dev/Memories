@@ -45,11 +45,19 @@ export default makeStyles({
   },
   title: {
     padding: "0 16px",
+    fontWeight: 600,
+    textAlign: "center",
+  },
+  message: {
+    fontSize: "15px",
   },
   cardActions: {
     padding: "0 16px 8px 16px",
     display: "flex",
     justifyContent: "space-between",
+    backgroundColor: "#FFAA00",
+  },
+  likeButton: {
     backgroundColor: "#FFAA00",
   },
 });

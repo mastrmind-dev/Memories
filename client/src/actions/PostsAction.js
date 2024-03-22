@@ -1,5 +1,4 @@
 import * as api from "../api";
-import * as postActions from "./PostsAction";
 
 export const getPosts = () => async (dispatch) => {
   try {
@@ -23,6 +22,7 @@ export const updatePost = (currentId, postData) => async (dispatch) => {
   return new Promise(async (res, rej)=>{
     try {
       const { data } = await api.updatePost(currentId, postData);
+      dispatch({ type: "UPDATE", payload: data });
       res(data)
     } catch (error) {
       console.log(error.message);
@@ -39,3 +39,12 @@ export const deletePost = (postId) => async (dispatch) => {
     console.log(error.message);
   }
 };
+
+export const likePost = (postId) => async (dispatch) => {
+  try {
+    const { data } = await api.likePost(postId);
+    dispatch({type:"LIKE", payload: data })
+  } catch (error) {
+    console.log(error.message);
+  }
+}

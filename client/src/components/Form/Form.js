@@ -8,7 +8,7 @@ const Form = ({ currentId, setCurrentId }) => {
   const inputRef = useRef();
   const [fileName, setFileName] = useState();
   const posts = useSelector((state) => {
-    return state.posts;
+    return state.postReducer;
   });
   const classes = useStyles();
   const [postData, setPostData] = useState({
@@ -56,6 +56,7 @@ const Form = ({ currentId, setCurrentId }) => {
   };
   const clear = () => {
     setCurrentId(null);
+    setFileName(null);
     setPostData(initialState);
   };
   return (
@@ -102,6 +103,7 @@ const Form = ({ currentId, setCurrentId }) => {
           onChange={(e) => {
             setPostData({ ...postData, message: e.target.value });
           }}
+          multiline
         />
         <TextField
           name="tags"
