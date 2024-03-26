@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState } from "react";
 import useStyles from "./styles.js";
 import { useDispatch } from "react-redux";
 import {
@@ -13,37 +13,13 @@ import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
 import DeleteIcon from "@material-ui/icons/Delete";
 import moment from "moment";
-import { deletePost, updatePost } from "../../../actions/PostsAction";
-import { ArrowDropDown } from "@material-ui/icons";
+import { deletePost, likePost } from "../../../actions/PostsAction";
 
 const Post = ({ post, setCurrentId }) => {
-  const user = "gethara";
   const dispatch = useDispatch();
   const classes = useStyles();
   const [liked, setLiked] = useState(post.likeCount > 0 ? true : false);
-  const [postId, setPostId] = useState(null);
-  const initialRender = useRef(true); //this is used to prevent useEffect, executing the code block at the first render.
-
-  useEffect(() => {
-    if (initialRender.current) {
-      initialRender.current = false;
-    } else {
-      putALike(postId);
-    }
-  }, [liked]);
-
-  async function putALike(postId) {
-    if (liked && !post.likedUsers.includes(user)) {
-      post.likedUsers.push(user);
-      dispatch(updatePost(postId, { likeCount: ++post.likeCount }));
-      setPostId(null);
-    } else {
-      if (!(post.likeCount === 0)) {
-        dispatch(updatePost(postId, { likeCount: --post.likeCount }));
-        setPostId(null);
-      }
-    }
-  }
+  const [likeCount, setLikeCount] = useState(post.likeCount);
 
   return (
     <Card className={classes.card}>
@@ -91,15 +67,24 @@ const Post = ({ post, setCurrentId }) => {
         <Button
           size="small"
           onClick={() => {
-            setPostId(post._id);
+            const likeCountTemp =
+              !liked === true
+                ? likeCount + 1
+                : likeCount !== 0 && likeCount - 1;
+
+            dispatch(
+              likePost(post._id, {likeCount: likeCountTemp})
+            );
+
             setLiked(!liked);
+            setLikeCount(likeCountTemp);
           }}
           className={classes.likeButton}
           variant="contained"
         >
           <ThumbUpAltIcon size="default" />
           LIKE
-          {post.likeCount}
+          {likeCount}
         </Button>
         <Button
           size="small"
