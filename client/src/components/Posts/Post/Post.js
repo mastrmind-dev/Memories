@@ -75,7 +75,7 @@ const Post = ({ post, setCurrentId }) => {
             dispatch(
               likePost(post._id, {likeCount: likeCountTemp})
             );
-
+console.log('sdf')
             setLiked(!liked);
             setLikeCount(likeCountTemp);
           }}
