@@ -70,9 +70,11 @@ module.exports = {
 
       const post = await PostMessage.findByIdAndUpdate(
         _id,
-        { likeCount: post.likeCount + 1 },
+        { likeCount: req.body.likeCount },
         { new: true }
       );
+
+      res.json(post);
     } catch (error) {
       console.log(error.message);
     }
